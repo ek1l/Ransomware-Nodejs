@@ -1,5 +1,5 @@
 import { exec } from 'child_process';
-const regedit = require('regedit');
+import regedit from 'regedit';
 const executeCommand = (
   command: string,
   usePowerShell: boolean = false,
@@ -26,9 +26,9 @@ const executeCommand = (
 
 const bypassUAC = async () => {
   // Editando uma chave de registro para alterar o comportamento do UAC
+
   regedit.createKey(
     'HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\System',
-    // @ts-ignore
     function (err: any) {
       if (err) {
         console.log('Erro ao editar o registro:', err);
