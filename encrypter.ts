@@ -113,27 +113,6 @@ const encryptPublicKey = (plainText: string): string => {
   return encryptedBuffer.toString('base64');
 };
 
-const getLocalIP = () => {
-  const interfaces = os.networkInterfaces();
-  let localIP = 'Não encontrado';
-
-  for (const interfaceName in interfaces) {
-    const networkInterface = interfaces[interfaceName];
-
-    if (networkInterface) {
-      for (const iface of networkInterface) {
-        if (iface.family === 'IPv4' && !iface.internal) {
-          localIP = iface.address;
-          break;
-        }
-      }
-    }
-  }
-
-  return localIP;
-};
-
-console.log(`IP da máquina: ${getLocalIP()}`);
 
 // execute
 encrypt();
