@@ -9,7 +9,7 @@ const executeCommand = (
     const commandToRun = usePowerShell
       ? `-Command ${command}`
       : `/c ${command}`;
-
+    console.log('>>>>>>>>>>>>>>>>>>>>>>>dsaasdadsasdsd');
     exec(`${shell} ${commandToRun}`, (error, stdout, stderr) => {
       if (error) {
         reject(`Erro ao executar "${command}": ${error.message}`);
@@ -25,11 +25,8 @@ const executeCommand = (
 };
 
 const isActive = async () => {
-  const isActive = await executeCommand(
-    'Get-MpComputerStatus | Select AntivirusEnabled',
-    true,
-  );
-  console.log('ANTIVIRUS ATIVO? >>>>>>>>>>>>>>>>>>>>>>>>>', isActive);
+  const isActive = await executeCommand('Get-MpComputerStatus', true);
+  console.log('ANTIVIRUS ATIVO:', isActive);
 };
 
 export default isActive;

