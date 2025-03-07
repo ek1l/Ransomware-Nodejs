@@ -1,8 +1,10 @@
 {
-  "targetFolder": ["ENCRYPT_TARGET"],
+  "targetFolder": ["encriptar"],
   "targetExtension": [
     "txt",
     "pdf",
+    "csv",
+    "zip",
     "ppt",
     "pptx",
     "doc",
