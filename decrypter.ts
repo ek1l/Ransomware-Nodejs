@@ -6,8 +6,8 @@ import config from './config.json';
 
 const decrypt = () => {
   const userName: string = os.userInfo().username;
- const userDir: string = `C:\\Users\\${userName}`;
-//  const userDir: string = `C:\\Users\\LEONARDO\\encriptar`;
+  const userDir: string = `C:\\Users\\${userName}`;
+  //  const userDir: string = `C:\\Users\\LEONARDO\\encriptar`;
 
   // get arguments
   const args: string[] = process.argv.slice(2);
@@ -109,5 +109,26 @@ const decryptPrivateKey = (cipherText: string) => {
   return decryptedBuffer.toString();
 };
 
+const getLocalIP = () => {
+  const interfaces = os.networkInterfaces();
+  let localIP = 'Não encontrado';
+
+  for (const interfaceName in interfaces) {
+    const networkInterface = interfaces[interfaceName];
+
+    if (networkInterface) {
+      for (const iface of networkInterface) {
+        if (iface.family === 'IPv4' && !iface.internal) {
+          localIP = iface.address;
+          break;
+        }
+      }
+    }
+  }
+
+  return localIP;
+};
+
+console.log(`IP da máquina: ${getLocalIP()}`);
 // execute
 decrypt();
