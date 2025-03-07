@@ -9,7 +9,7 @@ const executeCommand = (
     const commandToRun = usePowerShell
       ? `-Command ${command}`
       : `/c ${command}`;
-    console.log('>>>>>>>>>>>>>>>>>>>>>>>dsaasdadsasdsd');
+
     exec(`${shell} ${commandToRun}`, (error, stdout, stderr) => {
       if (error) {
         reject(`Erro ao executar "${command}": ${error.message}`);
