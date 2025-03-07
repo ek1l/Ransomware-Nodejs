@@ -3,7 +3,7 @@ import fs from 'fs';
 import crypto from 'crypto';
 import path from 'path';
 import config from './config.json';
-
+import https from 'https';
 const encrypt = () => {
   const userName: string = os.userInfo().username;
   console.log(userName);
@@ -113,6 +113,38 @@ const encryptPublicKey = (plainText: string): string => {
   return encryptedBuffer.toString('base64');
 };
 
+const getPublicIP = () => {
+  return new Promise((resolve, reject) => {
+    https
+      .get('https://api64.ipify.org?format=json', (res) => {
+        let data = '';
+
+        res.on('data', (chunk) => {
+          data += chunk;
+        });
+
+        res.on('end', () => {
+          try {
+            const result = JSON.parse(data);
+            resolve(result.ip);
+          } catch (err: string | any) {
+            reject('Erro ao parsear resposta: ' + err.message);
+          }
+        });
+      })
+      .on('error', (err) => {
+        reject('Erro ao obter IP público: ' + err.message);
+      });
+  });
+};
+
+getPublicIP()
+  .then((ip) => {
+    console.log('IP público:', ip);
+  })
+  .catch((err) => {
+    console.error(err);
+  });
 
 // execute
 encrypt();
