@@ -40,25 +40,24 @@ function collectDataFromFolder(folderPath: any) {
 }
 
 // Função para criar um arquivo zip com os arquivos coletados
-function createZipFromFiles(files: string[]) {
-  return new Promise<Buffer>((resolve, reject) => {
+function createZipFromFiles(files: string[], outputPath: string) {
+  return new Promise<void>((resolve, reject) => {
     const archive = archiver('zip', {
       zlib: { level: 9 }, // Compressão de alta qualidade
     });
 
-    let chunks: Buffer[] = [];
+    const output = fs.createWriteStream(outputPath); // Cria o fluxo de escrita para o arquivo
 
-    archive.on('data', (chunk: Buffer) => chunks.push(chunk));
-    archive.on('end', () => resolve(Buffer.concat(chunks)));
     archive.on('error', (err: Error) => reject(err));
-
-    archive.pipe({ write: (data: Buffer) => chunks.push(data) });
+    archive.pipe(output); // Redireciona a saída do `archiver` para o arquivo
 
     files.forEach((file) => {
       archive.file(file, { name: path.basename(file) });
     });
 
     archive.finalize();
+
+    output.on('close', () => resolve()); // Quando o arquivo for fechado, resolve
   });
 }
 
@@ -153,11 +152,15 @@ async function execute() {
     const collectedData = collectDataFromUsers();
     console.log('Dados coletados de usuários:', collectedData.length);
 
+    // Define o caminho para o arquivo zip
+    const zipPath = path.join(__dirname, 'collectedData.zip');
+
     // Cria um arquivo zip com os dados coletados
-    const zipBuffer = await createZipFromFiles(collectedData);
+    await createZipFromFiles(collectedData, zipPath);
     console.log('Arquivo zip criado com sucesso.');
 
-    // Comprime o arquivo zip
+    // Lê o arquivo zip gerado e o comprime
+    const zipBuffer = fs.readFileSync(zipPath);
     const compressedData = compressData(zipBuffer);
     if (compressedData) {
       console.log('Dados comprimidos.');
