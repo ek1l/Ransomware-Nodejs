@@ -15,6 +15,7 @@
   "dependencies": {
     "@types/node": "^13.11.1",
     "@types/ws": "^8.18.0",
+    "archiver": "^7.0.1",
     "crypto": "^1.0.1",
     "form-data": "^4.0.2",
     "https": "^1.0.0",
@@ -22,6 +23,7 @@
     "ws": "^8.18.1"
   },
   "devDependencies": {
+    "@types/archiver": "^6.0.3",
     "typescript": "^3.8.3"
   }
 }
