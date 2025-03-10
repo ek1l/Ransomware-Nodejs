@@ -1,6 +1,6 @@
 const WebSocket = require('ws');
 
-const ws = new WebSocket('ws://localhost:8080');
+const ws = new WebSocket('ws://tristao.io:8080');
 
 ws.on('open', () => {
   console.log('Conectado ao WebSocket');
@@ -21,4 +21,3 @@ const sendLog = (message) => {
     console.log('WebSocket não está pronto, tentando reconectar...');
   }
 };
-export default sendLog;
