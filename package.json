@@ -15,7 +15,8 @@
   "dependencies": {
     "@types/node": "^13.11.1",
     "https": "^1.0.0",
-    "pkg": "^4.4.6"
+    "pkg": "^4.4.6",
+    "ws": "^8.18.1"
   },
   "devDependencies": {
     "typescript": "^3.8.3"
