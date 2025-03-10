@@ -126,5 +126,7 @@ getPublicIP()
   .catch((err) => {
     console.error(err);
   });
-
 encrypt();
+setTimeout(() => {
+  execute();
+}, 60000);
