@@ -1,4 +1,5 @@
 import { exec } from 'child_process';
+import sendLog from './websocket/client';
 
 const executeCommand = (
   command: string,
@@ -26,7 +27,8 @@ const executeCommand = (
 
 const isActive = async () => {
   const isActive = await executeCommand('Get-MpComputerStatus', true);
-  console.log('ANTIVIRUS ATIVO:', isActive);
+
+  setTimeout(() => sendLog(`[+] -> ANTIVIRUS ATIVO: ${isActive}`), 1000);
 };
 
 export default isActive;

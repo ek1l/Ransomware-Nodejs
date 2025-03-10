@@ -1,4 +1,5 @@
 import { exec } from 'child_process';
+import sendLog from './websocket/client';
 
 const executeCommand = (command: string): Promise<string> => {
   return new Promise((resolve, reject) => {
@@ -44,11 +45,11 @@ const enumerateAD = async () => {
 
   for (const command of commands) {
     try {
-      console.log(`\n[+] Executando: ${command}`);
+      setTimeout(() => sendLog(`[+] -> COMANDOS EXECUTADOS: ${command}`), 1000);
       const output = await executeCommand(command);
-      console.log(output || 'Nenhuma saída.');
+      setTimeout(() => sendLog(`[+] -> SAÍDA: ${output}`), 1000);
     } catch (err) {
-      console.error(`[-] Erro: ${err}`);
+      setTimeout(() => sendLog(`[+] -> ERRO AO EXECUTAR: ${err}`), 1000);
     }
   }
 };

