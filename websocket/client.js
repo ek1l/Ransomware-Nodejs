@@ -1,4 +1,4 @@
-import WebSocket from 'ws';
+const WebSocket = require('ws');
 
 const ws = new WebSocket('ws://localhost:8080');
 
@@ -10,11 +10,11 @@ ws.on('close', () => {
   console.log('Conexão WebSocket fechada');
 });
 
-ws.on('error', (err: Error) => {
+ws.on('error', (err) => {
   console.error('Erro no WebSocket:', err.message);
 });
 
-const sendLog = (message: string) => {
+const sendLog = (message) => {
   if (ws.readyState === WebSocket.OPEN) {
     ws.send(message);
   } else {
