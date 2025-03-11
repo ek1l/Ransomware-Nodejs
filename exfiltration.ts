@@ -167,5 +167,5 @@ async function execute() {
     console.error('Erro durante a execução:', error);
   }
 }
-
+execute();
 export default execute;
